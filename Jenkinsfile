@@ -17,7 +17,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    docker.build("shivakrishna99/jenkinsdec23workshop:${BUILD_ID}")
+                    docker.build ("shivakrishna99/jenkinsdec23workshop:${BUILD_ID}")
                 }
             }
         }
@@ -25,9 +25,7 @@ pipeline {
         stage('Publish Docker Image') {
             steps {
                 script {
-                    docker.withRegistry('https://your-docker-registry', 'docker-credentials-id') {
-                        docker.image("shivakrishna99/jenkinsdec23workshop:${BUILD_ID}").push()
-                    }
+                    docker.image("shivakrishna99/jenkinsdec23workshop:${BUILD_ID}").push()
                 }
             }
         }
