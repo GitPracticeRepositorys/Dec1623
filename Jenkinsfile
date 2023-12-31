@@ -20,15 +20,6 @@ pipeline {
                     docker.build ("shivakrishna99/jenkinsdec23workshop:${BUILD_ID}")
                 }
             }
-        }
-
-        stage('Trivy Scan') {
-            steps {
-                script {
-                    sh "trivy image --format json -o trivy-report.json shivakrishna99/jenkinsdec23workshop:$BUILD_ID"
-                }
-                publishHTML([reportName: 'Trivy Vulnerability Report', reportDir: '.', reportFiles: 'trivy-report.json', keepAll: true, alwaysLinkToLastBuild: true, allowMissing: false])
-            }
         }       
 
         stage('Publish Docker Image') {
