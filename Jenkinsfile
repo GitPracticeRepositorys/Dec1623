@@ -23,7 +23,7 @@ pipeline {
                 }
                 publishHTML([reportName: 'Trivy Vulnerability Report', reportDir: '.', reportFiles: 'trivy-report.json', keepAll: true, alwaysLinkToLastBuild: true, allowMissing: false])
             }
-        }
+        } //
         stage('publish docker image') {
             steps {
                 sh "docker image push shivakrishna99/jenkinsdec23workshop:$BUILD_ID"
