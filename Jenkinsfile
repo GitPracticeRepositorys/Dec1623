@@ -22,15 +22,6 @@ pipeline {
             }
         }
 
-        stage('Trivy Scan') {
-            steps {
-                script {
-                    sh "trivy image --format json -o trivy-report.json shivakrishna99/jenkinsdec23workshop:${BUILD_ID}"
-                    publishHTML([reportName: 'Trivy Vulnerability Report', reportDir: '.', reportFiles: 'trivy-report.json', keepAll: true, alwaysLinkToLastBuild: true, allowMissing: false])
-                }
-            }
-        }
-
         stage('Publish Docker Image') {
             steps {
                 script {
@@ -47,14 +38,6 @@ pipeline {
                 sh "kubectl patch deployment netflix-app -p '{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"netflix-app\",\"image\":\"shivakrishna99/jenkinsdec23workshop:${BUILD_ID}\"}]}}}}'"
             }
         }
-    }
+    } //
 
-    post {
-        success {
-            echo 'Pipeline succeeded! You can add further steps here.'
-        }
-        failure {
-            echo 'Pipeline failed! You can add further steps for failure handling.'
-        }
-    }
-}
+    
