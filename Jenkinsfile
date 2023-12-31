@@ -22,6 +22,15 @@ pipeline {
             }
         }
 
+        stage('Trivy Scan') {
+            steps {
+                script {
+                    sh "trivy image --format json -o trivy-report.json shaikkhajaibrahim/jenkinsdec23workshop:$BUILD_ID"
+                }
+                publishHTML([reportName: 'Trivy Vulnerability Report', reportDir: '.', reportFiles: 'trivy-report.json', keepAll: true, alwaysLinkToLastBuild: true, allowMissing: false])
+            }
+        }       
+
         stage('Publish Docker Image') {
             steps {
                 script {
@@ -31,6 +40,7 @@ pipeline {
         }
 
         stage('Deploy to Kubernetes') {
+            agent { label 'docker-node' }
             steps {
                 sh "kubectl apply -f deployment/k8s/deployment.yaml"
                 sh "kubectl patch deployment netflix-app -p '{\"spec\":{\"template\":{\"spec\":{\"containers\":[{\"name\":\"netflix-app\",\"image\":\"shivakrishna99/jenkinsdec23workshop:${BUILD_ID}\"}]}}}}'"
